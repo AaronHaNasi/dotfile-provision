@@ -1,0 +1,7 @@
+---
+- name: System set up
+  hosts: all
+  tasks: 
+
+  - name: OS specific tasks
+    ansible.builtin.include_tasks: "{{ os }}_tasks.yml"

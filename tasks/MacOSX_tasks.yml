@@ -1,0 +1,31 @@
+---
+
+- name: Install packages with Homebrew
+  ansible.builtin.homebrew:
+    name: "{{ OSX_homebrew_packages }}"
+
+- name: Install Homebrew Cask applications
+  ansible.builtin.homebrew_cask:
+    name: "{{ OSX_homebrew_cask_packages }}"
+
+- name: Copy dotfiles
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.{{ item }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+  with_items:
+    - zshrc
+    - p10k.zsh
+
+- name: Copy ZSH_CUSTOM files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/{{ item }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+  with_items:
+    - aliases.zsh
+    - vars.zsh

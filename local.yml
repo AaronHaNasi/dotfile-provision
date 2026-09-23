@@ -9,4 +9,4 @@
       var: ansible_facts.keys() | list
 
   - name: OS specific tasks
-    ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}_tasks.yml"
+    ansible.builtin.include_tasks: "tasks/{{ ansible_facts['distribution'] }}_tasks.yml"

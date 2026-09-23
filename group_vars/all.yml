@@ -10,5 +10,4 @@ Fedora_dnf_packages:
   - btop
   - neovim
   - zsh-autosuggestions
-  - zsh-autocomplete
   - zsh-syntax-highlighting

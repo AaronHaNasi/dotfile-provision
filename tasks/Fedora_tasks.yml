@@ -5,7 +5,7 @@
     name: "{{ Fedora_dnf_packages }}"
     state: present
   become: True
-  
+
 - name: Install oh-my-zsh
   ansible.builtin.git:
     repo: 'https://github.com/ohmyzsh/ohmyzsh.git'
@@ -15,8 +15,7 @@
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ ansible_env.HOME }}/.{{ item }}"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ user }}"
     mode: '0644'
   with_items:
     - zshrc
@@ -33,5 +32,5 @@
 
 - name: Change default shell to zsh
   ansible.builtin.user:
-    name: "{{ ansible_user }}"
+    name: "{{ user }}"
     shell: /bin/zsh

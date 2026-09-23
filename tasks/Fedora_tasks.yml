@@ -4,7 +4,8 @@
   ansible.builtin.dnf:
     name: "{{ Fedora_dnf_packages }}"
     state: present
-
+  become: True
+  
 - name: Install oh-my-zsh
   ansible.builtin.git:
     repo: 'https://github.com/ohmyzsh/ohmyzsh.git'

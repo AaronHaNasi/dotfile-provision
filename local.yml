@@ -4,5 +4,9 @@
   connection: local
   tasks: 
 
+  - name: Display facts
+    ansible.builtin.debug:
+      var: ansible_facts.keys() | list
+
   - name: OS specific tasks
     ansible.builtin.include_tasks: "{{ ansible_facts['ansible_distribution'] }}_tasks.yml"

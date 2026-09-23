@@ -9,3 +9,6 @@ Fedora_dnf_packages:
   - python3-pip
   - btop
   - neovim
+  - zsh-autosuggestions
+  - zsh-autocomplete
+  - zsh-syntax-highlighting

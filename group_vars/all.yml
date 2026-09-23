@@ -11,3 +11,4 @@ Fedora_dnf_packages:
   - neovim
   - zsh-autosuggestions
   - zsh-syntax-highlighting
+  - eza

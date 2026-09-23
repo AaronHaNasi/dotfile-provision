@@ -16,18 +16,39 @@
     repo: 'https://github.com/ohmyzsh/ohmyzsh.git'
     dest: "{{ home }}/.oh-my-zsh"
 
-- name: Clone p10k repo
-  ansible.builtin.git:
-    repo: https://github.com/romkatv/powerlevel10k.git 
-    dest: "{{ home }}/.oh-my-zsh/custom/themes/powerelevel10k"
+
+- name : Install p10k themes
+  block: 
+
+  - name: Set p10k location
+    ansible.builtin.set_fact:
+      p10k_theme_path: "{{ home }}/.oh-my-zsh/custom/themes/powerlevel0k"
+
+  - name: Clone p10k repo
+    ansible.builtin.git:
+      repo: https://github.com/romkatv/powerlevel10k.git 
+      dest: "{{ p10k theme_path }}"
+
 
 - name: Install zsh-autocomplete
-  ansible.builtin.git:
-    repo: https://github.com/zsh-users/zsh-autosuggestions
-    dest: "{{ home }}/.zsh/zsh-autosuggestions"
+  block:
+  
+  - name: Set zsh-autosuggestions path
+    ansible.builtin.set_fact:
+      zsh_autosuggestions_path: "{{ home }}/.zsh/zsh-autosuggestions"
+
+  - name: Clone zsh-autosuggestions
+    ansible.builtin.git:
+      repo: https://github.com/zsh-users/zsh-autosuggestions
+      dest: "{{ zsh_autosuggestions_path }}"
+
+- name: Set location for zsh-autocomplete and zsh-syntax-highlighting
+  ansible.builtin.set_fact:
+    zsh_autocomplete_path: /usr/share/zsh-autosuggestions
+    zsh_syntax_highlighting_path: /usr/share/zsh-syntax-highlighting/
 
 - name: Copy dotfiles
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: "{{ item }}"
     dest: "{{ home }}/.{{ item }}"
     owner: "{{ user }}"

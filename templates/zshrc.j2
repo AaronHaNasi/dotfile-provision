@@ -79,11 +79,11 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+source {{ zsh_autocomplete_path }}/zsh-autocomplete.plugin.zsh
 
 source $ZSH/oh-my-zsh.sh
 
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source {{ zsh_autosuggestions_path }}/zsh-autosuggestions.zsh
 
 # User configuration
 
@@ -114,9 +114,9 @@ source $ZSH_CUSTOM/aliases.zsh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+source {{ p10k_theme_path }}/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source {{ zsh_syntax_highlighting_path }}/zsh-syntax-highlighting.zsh

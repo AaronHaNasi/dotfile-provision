@@ -4,7 +4,6 @@ Fedora_dnf_packages:
   - wget
   - curl
   - htop
-  - neofetch
   - tmux
   - vim
   - python3-pip

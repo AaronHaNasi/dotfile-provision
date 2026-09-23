@@ -12,3 +12,9 @@ Fedora_dnf_packages:
   - zsh-autosuggestions
   - zsh-syntax-highlighting
   - eza
+  - fontconfig
+  - tar
+  - xz
+
+nerd_fonts:
+  - Meslo

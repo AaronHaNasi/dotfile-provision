@@ -27,7 +27,7 @@
   - name: Clone p10k repo
     ansible.builtin.git:
       repo: https://github.com/romkatv/powerlevel10k.git 
-      dest: "{{ p10k theme_path }}"
+      dest: "{{ p10k_theme_path }}"
 
 
 - name: Install zsh-autocomplete

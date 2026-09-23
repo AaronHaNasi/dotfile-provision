@@ -48,14 +48,21 @@
     zsh_syntax_highlighting_path: /usr/share/zsh-syntax-highlighting/
 
 - name: Copy dotfiles
-  ansible.builtin.template:
-    src: "{{ item }}"
-    dest: "{{ home }}/.{{ item }}"
-    owner: "{{ user }}"
-    mode: '0644'
-  with_items:
-    - zshrc
-    - p10k.zsh
+  block: 
+
+  - name: Copy .zshrc  
+    ansible.builtin.template:
+      src: zshrc.j2
+      dest: "{{ home }}/.zshrc"
+      owner: "{{ user }}"
+      mode: '0644'
+
+  - name: Copy p10k config
+    ansible.builtin.copy:
+      src: p10k.zsh
+      dest: "{{ home}}/.p10k.zsh"
+      owner: "{{ user}}"
+      mode: '0644'
 
 - name: Copy ZSH_CUSTOM files
   ansible.builtin.copy:

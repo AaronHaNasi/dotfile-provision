@@ -22,7 +22,7 @@
 
   - name: Set p10k location
     ansible.builtin.set_fact:
-      p10k_theme_path: "{{ home }}/.oh-my-zsh/custom/themes/powerlevel0k"
+      p10k_theme_path: "{{ home }}/.oh-my-zsh/custom/themes/powerlevel10k"
 
   - name: Clone p10k repo
     ansible.builtin.git:
@@ -32,20 +32,43 @@
 
 - name: Install zsh-autocomplete
   block:
-  
-  - name: Set zsh-autosuggestions path
+
+  - name: Set zsh-autocomplete path
     ansible.builtin.set_fact:
-      zsh_autosuggestions_path: "{{ home }}/.zsh/zsh-autosuggestions"
+      zsh_autocomplete_path: "{{ home }}/.zsh/zsh-autocomplete"
 
-  - name: Clone zsh-autosuggestions
+  - name: Clone zsh-autocomplete
     ansible.builtin.git:
-      repo: https://github.com/zsh-users/zsh-autosuggestions
-      dest: "{{ zsh_autosuggestions_path }}"
+      repo: https://github.com/marlonrichert/zsh-autocomplete.git
+      dest: "{{ zsh_autocomplete_path }}"
 
-- name: Set location for zsh-autocomplete and zsh-syntax-highlighting
+- name: Set location for zsh-autosuggestions and zsh-syntax-highlighting
   ansible.builtin.set_fact:
-    zsh_autocomplete_path: /usr/share/zsh-autosuggestions
-    zsh_syntax_highlighting_path: /usr/share/zsh-syntax-highlighting/
+    zsh_autosuggestions_path: /usr/share/zsh-autosuggestions
+    zsh_syntax_highlighting_path: /usr/share/zsh-syntax-highlighting
+
+- name: Install Nerd Fonts
+  block:
+
+  - name: Create user font directory
+    ansible.builtin.file:
+      path: "{{ home }}/.local/share/fonts/{{ item }}"
+      state: directory
+      mode: '0755'
+    loop: "{{ nerd_fonts }}"
+
+  - name: Download and extract Nerd Fonts
+    ansible.builtin.unarchive:
+      src: "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/{{ item }}.tar.xz"
+      dest: "{{ home }}/.local/share/fonts/{{ item }}"
+      remote_src: True
+      creates: "{{ home }}/.local/share/fonts/{{ item }}/LICENSE.txt"
+    loop: "{{ nerd_fonts }}"
+    register: nerd_fonts_download
+
+  - name: Refresh font cache
+    ansible.builtin.command: fc-cache -f
+    when: nerd_fonts_download is changed
 
 - name: Copy dotfiles
   block: 

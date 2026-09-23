@@ -1,6 +1,7 @@
 ---
 - name: System set up
-  hosts: all
+  hosts: localhost
+  connection: local
   tasks: 
 
   - name: OS specific tasks

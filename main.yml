@@ -4,4 +4,4 @@
   tasks: 
 
   - name: OS specific tasks
-    ansible.builtin.include_tasks: "{{ os }}_tasks.yml"
+    ansible.builtin.include_tasks: "{{ ansible_facts.ansible_distribution }}_tasks.yml"

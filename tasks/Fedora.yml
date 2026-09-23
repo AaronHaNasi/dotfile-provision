@@ -1,0 +1,36 @@
+---
+
+- name: Install packages with DNF
+  ansible.builtin.dnf:
+    name: "{{ Fedora_dnf_packages }}"
+    state: present
+
+- name: Install oh-my-zsh
+  ansible.builtin.git:
+    repo: 'https://github.com/ohmyzsh/ohmyzsh.git'
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh"
+
+- name: Copy dotfiles
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.{{ item }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+  with_items:
+    - zshrc
+    - p10k.zsh
+
+- name: Copy ZSH_CUSTOM files
+  ansible.builtin.copy:
+    src: "zsh_custom/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/{{ item }}"
+  with_items:
+    - aliases.zsh
+    - vars.zsh
+    - quotes
+
+- name: Change default shell to zsh
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    shell: /bin/zsh

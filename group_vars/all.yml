@@ -1,0 +1,12 @@
+Fedora_dnf_packages:
+  - zsh
+  - git
+  - wget
+  - curl
+  - htop
+  - neofetch
+  - tmux
+  - vim
+  - python3-pip
+  - btop
+  - neovim

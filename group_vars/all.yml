@@ -15,7 +15,7 @@ Fedora_dnf_packages:
   - fontconfig
   - tar
   - xz
-  - fortune
+  - fortune-mod
 
 nerd_fonts:
   - Meslo

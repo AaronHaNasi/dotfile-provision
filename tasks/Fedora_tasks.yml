@@ -94,6 +94,7 @@
   with_items:
     - aliases.zsh
     - vars.zsh
+    - functions.zsh
     - quotes
 
 - name: Change default shell to zsh

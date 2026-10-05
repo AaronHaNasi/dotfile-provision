@@ -5,6 +5,10 @@
     user: "{{ ansible_facts['user_id'] }}"
     home: "{{ ansible_facts['user_dir'] }}"
 
+- name: Set oh-my-zsh custom folder
+  ansible.builtin.set_fact:
+    oh_my_zsh_custom: "{{ home }}/.oh-my-zsh/custom
+
 - name: Install packages with DNF
   ansible.builtin.dnf:
     name: "{{ Fedora_dnf_packages }}"
@@ -90,12 +94,15 @@
 - name: Copy ZSH_CUSTOM files
   ansible.builtin.copy:
     src: "zsh_custom/{{ item }}"
-    dest: "{{ home }}/.oh-my-zsh/custom/{{ item }}"
+    dest: "{{ oh_my_zsh_custom }}/{{ item }}"
   with_items:
     - aliases.zsh
     - vars.zsh
     - functions.zsh
     - quotes
+
+- name: Create strfile for quotes
+  command: "strfile {{ oh_my_zsh_custom }}/quotes {{ oh_my_zsh_custom/quotes.dat"
 
 - name: Change default shell to zsh
   ansible.builtin.user:
@@ -103,3 +110,4 @@
     shell: /bin/zsh
     state: present
   become: True
+

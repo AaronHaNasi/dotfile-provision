@@ -1,4 +1,4 @@
-Fedora_dnf_packages:
+fedora_dnf_packages:
   - zsh
   - git
   - wget

@@ -7,11 +7,11 @@
 
 - name: Set oh-my-zsh custom folder
   ansible.builtin.set_fact:
-    oh_my_zsh_custom: "{{ home }}/.oh-my-zsh/custom
+    oh_my_zsh_custom: "{{ home }}/.oh-my-zsh/custom"
 
 - name: Install packages with DNF
   ansible.builtin.dnf:
-    name: "{{ Fedora_dnf_packages }}"
+    name: "{{ fedora_dnf_packages }}"
     state: present
   become: True
 
@@ -19,20 +19,6 @@
   ansible.builtin.git:
     repo: 'https://github.com/ohmyzsh/ohmyzsh.git'
     dest: "{{ home }}/.oh-my-zsh"
-
-
-- name : Install p10k themes
-  block: 
-
-  - name: Set p10k location
-    ansible.builtin.set_fact:
-      p10k_theme_path: "{{ home }}/.oh-my-zsh/custom/themes/powerlevel10k"
-
-  - name: Clone p10k repo
-    ansible.builtin.git:
-      repo: https://github.com/romkatv/powerlevel10k.git 
-      dest: "{{ p10k_theme_path }}"
-
 
 - name: Install zsh-autocomplete
   block:
@@ -73,41 +59,4 @@
   - name: Refresh font cache
     ansible.builtin.command: fc-cache -f
     when: nerd_fonts_download is changed
-
-- name: Copy dotfiles
-  block: 
-
-  - name: Copy .zshrc  
-    ansible.builtin.template:
-      src: zshrc.j2
-      dest: "{{ home }}/.zshrc"
-      owner: "{{ user }}"
-      mode: '0644'
-
-  - name: Copy p10k config
-    ansible.builtin.copy:
-      src: p10k.zsh
-      dest: "{{ home}}/.p10k.zsh"
-      owner: "{{ user}}"
-      mode: '0644'
-
-- name: Copy ZSH_CUSTOM files
-  ansible.builtin.copy:
-    src: "zsh_custom/{{ item }}"
-    dest: "{{ oh_my_zsh_custom }}/{{ item }}"
-  with_items:
-    - aliases.zsh
-    - vars.zsh
-    - functions.zsh
-    - quotes
-
-- name: Create strfile for quotes
-  command: "strfile {{ oh_my_zsh_custom }}/quotes {{ oh_my_zsh_custom/quotes.dat"
-
-- name: Change default shell to zsh
-  ansible.builtin.user:
-    name: "{{ user }}"
-    shell: /bin/zsh
-    state: present
-  become: True
 

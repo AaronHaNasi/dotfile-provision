@@ -2,7 +2,72 @@
 - name: System set up
   hosts: localhost
   connection: local
-  tasks: 
+  tasks:
 
-  - name: OS specific tasks
-    ansible.builtin.include_tasks: "tasks/{{ ansible_facts['distribution'] }}_tasks.yml"
+    - name: Set OS fact
+      ansible.builtin.set_fact:
+        os_type: "{{ ansible_facts['distribution'] | lower }}"
+
+    - name: OS specific tasks
+      ansible.builtin.include_tasks: "tasks/{{ os_type }}_tasks.yml"
+
+    - name : Install p10k themes
+      block: 
+
+      - name: Set p10k location
+        ansible.builtin.set_fact:
+          p10k_theme_path: "{{ home }}/.oh-my-zsh/custom/themes/powerlevel10k"
+     
+      - name: Clone p10k repo
+        ansible.builtin.git:
+          repo: https://github.com/romkatv/powerlevel10k.git 
+          dest: "{{ p10k_theme_path }}"
+
+      - name : Install p10k themes
+        block: 
+    
+        - name: Set p10k location
+          ansible.builtin.set_fact:
+            p10k_theme_path: "{{ home }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    
+        - name: Clone p10k repo
+          ansible.builtin.git:
+            repo: https://github.com/romkatv/powerlevel10k.git 
+            dest: "{{ p10k_theme_path }}"
+
+        - name: Copy dotfiles
+          block: 
+        
+          - name: Copy .zshrc  
+            ansible.builtin.template:
+              src: zshrc.j2
+              dest: "{{ home }}/.zshrc"
+              owner: "{{ user }}"
+              mode: '0644'
+        
+          - name: Copy p10k config
+            ansible.builtin.copy:
+              src: p10k.zsh
+              dest: "{{ home}}/.p10k.zsh"
+              owner: "{{ user}}"
+              mode: '0644'
+        
+        - name: Copy ZSH_CUSTOM files
+          ansible.builtin.copy:
+            src: "zsh_custom/{{ item }}"
+            dest: "{{ oh_my_zsh_custom }}/{{ item }}"
+          with_items:
+            - aliases.zsh
+            - vars.zsh
+            - functions.zsh
+            - quotes
+        
+        - name: Create strfile for quotes
+          command: "strfile {{ oh_my_zsh_custom }}/quotes {{ oh_my_zsh_custom/quotes.dat"
+        
+        - name: Change default shell to zsh
+          ansible.builtin.user:
+            name: "{{ user }}"
+            shell: /bin/zsh
+            state: present
+          become: True
